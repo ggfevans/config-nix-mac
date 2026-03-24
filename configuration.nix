@@ -108,7 +108,7 @@
   # --- Auto-upgrade ---
   system.autoUpgrade = {
     enable = true;
-    flake = "github:ggfevans/config-nix-sunny#nix-mac";
+    flake = "github:ggfevans/config-nix-mac#nix-mac";
     dates = "04:00";
     allowReboot = false;
   };
