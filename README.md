@@ -1,18 +1,35 @@
-# nix-charlie
+# config-nix-mac
 
-NixOS configuration for a 2018 MacBook Pro (T2 chip), running as a headless homelab server.
+NixOS configuration for **nix-mac** — a 2011 Mac Mini (5,1) running NixOS 25.11 "Xantusia".
 
-## Firmware
+## Hardware
 
-The `firmware/brcm/` directory is gitignored — it contains Apple's proprietary
-Wi-Fi/Bluetooth firmware which can't be redistributed. To regenerate:
+- **CPU:** Intel Core i5-2415M (Sandy Bridge) — 2c/4t @ 2.3–2.9 GHz
+- **RAM:** 8 GB DDR3
+- **GPU:** Intel HD Graphics 3000
+- **SSD:** Kingston SUV400S37 240GB (btrfs, zstd)
+- **HDD:** Seagate ST2000LM015 2TB (btrfs, zstd, mounted at /data)
+- **Wi-Fi:** Broadcom BCM4331 (broadcom_sta)
+
+## Key Features
+
+- Flake-based NixOS 25.11 config
+- Btrfs with subvolumes (@, @home, @nix, @log) and zstd compression
+- SSH hardened on port 42042 (key-only)
+- Tailscale VPN
+- Powertop auto-tune for power management
+- Weekly btrfs auto-scrub
+- Auto-upgrade from this repo at 04:00 daily
+
+## Usage
 ```bash
-sudo mkdir -p /lib/firmware/brcm
-get-apple-firmware  # select "Retrieve from macOS" or "Download recovery image"
-cp /lib/firmware/brcm/* ~/nixos-config/firmware/brcm/
+# Rebuild from local config
+sudo nixos-rebuild switch --flake /etc/nixos#nix-mac
+
+# Garbage collect old generations
+sudo nix-collect-garbage -d
 ```
 
-## Rebuild
-```bash
-sudo nixos-rebuild switch --flake ~/nixos-config
-```
+## Related
+
+- [config-nix-charlie](https://github.com/ggfevans/config-nix-charlie) — NixOS on 2018 MacBook Pro (T2)
